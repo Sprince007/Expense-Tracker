@@ -90,7 +90,7 @@ function EditBudget({budgetInfo,refreshData}) {
                     <h2 className='text-black font-medium my-1'>Budget Amount</h2>
                     <Input type="number" 
                     defaultValue={budgetInfo?.amount}
-                    placeholder="e.g. $2000"
+                    placeholder="e.g. 2000 FCFA"
                      onChange={(e) => setAmount(e.target.value)} />
                   </div>
                 </div>

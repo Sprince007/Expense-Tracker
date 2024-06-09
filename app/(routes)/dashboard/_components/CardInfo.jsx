@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 function CardInfo({ budgetList = [] }) { // Ensure budgetList is an array by default
 
     const [totalBudget, setTotalBudget] = useState(0);
-    const [totalSpend, setTotalSpend] = useState(0);
+    const [totalSpent, settotalSpent] = useState(0);
 
     useEffect(() => {
         if (budgetList.length > 0) {
@@ -14,15 +14,15 @@ function CardInfo({ budgetList = [] }) { // Ensure budgetList is an array by def
 
     const CalculateCardInfo = () => {
         let totalBudget_ = 0;
-        let totalSpend_ = 0;
+        let totalSpent_ = 0;
 
         budgetList.forEach(element => {
             totalBudget_ = totalBudget_ + Number(element.amount);
-            totalSpend_ = totalSpend_ + (element.totalSpend || 0); // Ensure totalSpend is a number
+            totalSpent_ = totalSpent_ + (element.totalSpent || 0); // Ensure totalSpent is a number
         });
 
         setTotalBudget(totalBudget_);
-        setTotalSpend(totalSpend_);
+        settotalSpent(totalSpent_);
     }
 
     return (
@@ -40,7 +40,7 @@ function CardInfo({ budgetList = [] }) { // Ensure budgetList is an array by def
                     <div className='p-7 border rounded-lg flex items-center justify-between'>
                         <div>
                             <h2 className='text-sm'>Total Spent</h2>
-                            <h2 className='font-bold text-2xl'>${totalSpend}</h2>
+                            <h2 className='font-bold text-2xl'>{totalSpent} FCFA</h2>
                         </div>
                         <ReceiptText
                             className='bg-purple-500 p-3 h-12 w-12 rounded-full text-white' />
