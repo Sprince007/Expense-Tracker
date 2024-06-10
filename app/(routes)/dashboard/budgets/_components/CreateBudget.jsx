@@ -94,7 +94,7 @@ function CreateBudget({refreshData}) {
                 <Button 
                   disabled={!(name && amount)} 
                   onClick={() => onCreateBudget()} 
-                  className='mt-5 w-full bg-cyan-500 hover:bg-orange-500'>
+                  className='mt-5 w-full bg-purple-500 hover:bg-cyan-500'>
                   Create Budget
                 </Button>
               </DialogClose>

@@ -61,7 +61,7 @@ function EditBudget({budgetInfo,refreshData}) {
         
         <Dialog>
           <DialogTrigger asChild>
-          <Button className='flex gap-2 bg-purple-500'> <PenBox/> Edit</Button>
+          <Button className='flex gap-2 bg-purple-500 hover:bg-cyan-500 rounded-xl'> <PenBox/> Edit</Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
@@ -101,7 +101,7 @@ function EditBudget({budgetInfo,refreshData}) {
                 <Button 
                   disabled={!(name && amount)} 
                   onClick={() => onUpdateBudget()} 
-                  className='mt-5 w-full bg-cyan-500 hover:bg-purple-500'>
+                  className='mt-5 w-full bg-purple-500 hover:bg-cyan-500'>
                   Update Budget
                 </Button>
               </DialogClose>
