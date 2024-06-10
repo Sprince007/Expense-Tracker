@@ -6,14 +6,19 @@ import { useEffect } from "react";
 import { useAuth } from "@clerk/nextjs";
 
 export default function SignInPage() {
-  const { isSignedIn } = useAuth();
+  const { isSignedIn, isLoaded } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    if (isSignedIn) {
-      router.push('/dashboard/budgets'); // Redirect to the dashboard page
+    if (isLoaded && isSignedIn) {
+      router.push('/dashboard'); // Redirect to the dashboard page
     }
-  }, [isSignedIn, router]);
+  }, [isSignedIn, isLoaded, router]);
+
+  // Don't render the SignIn component if the user is already signed in
+  if (!isLoaded || isSignedIn) {
+    return null; // or you can return a loading spinner or something
+  }
 
   return (
     <section className="bg-white">
