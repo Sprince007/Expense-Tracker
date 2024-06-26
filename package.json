@@ -19,6 +19,7 @@
     "@react-pdf/renderer": "^3.4.4",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "date-fns": "^3.6.0",
     "drizzle-orm": "^0.30.10",
     "emoji-picker-react": "^4.9.3",
     "jspdf": "^2.5.1",

@@ -4,10 +4,14 @@ import BudgetList from './_components/BudgetList';
 import { useUser } from '@clerk/nextjs';
 import { db } from '@/utils/dbConfig';
 import { desc, eq, getTableColumns, sql } from 'drizzle-orm';
-import { Budgets, Expenses } from '@/utils/schema';
+import { Incomes, Budgets, Expenses } from '@/utils/schema';
 
 function Budget() {
   const [budgets, setBudgets] = useState([]);
+  const [filteredBudgets, setFilteredBudgets] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [sortCriteria, setSortCriteria] = useState('createdAt');
+  const [sortOrder, setSortOrder] = useState('desc');
   const { user } = useUser();
 
   useEffect(() => {
@@ -16,48 +20,58 @@ function Budget() {
     }
   }, [user]);
 
+  useEffect(() => {
+    filterAndSortBudgets();
+  }, [searchTerm, sortCriteria, sortOrder, budgets]);
+
   const fetchBudgets = async () => {
     const result = await db.select({
       ...getTableColumns(Budgets),
       totalSpent: sql`sum(${Expenses.amount})`.mapWith(Number),
-      totalItem: sql`count(${Expenses.id})`.mapWith(Number)
-    }).from(Budgets)
+      totalItem: sql`count(${Expenses.id})`.mapWith(Number),
+      incomeName: Incomes.name // Fetch the name of the linked income
+    })
+      .from(Budgets)
       .leftJoin(Expenses, eq(Budgets.id, Expenses.budgetId))
+      .leftJoin(Incomes, eq(Budgets.incomeId, Incomes.id)) // Join with Incomes to get the income name
       .where(eq(Budgets.createdBy, user?.primaryEmailAddress?.emailAddress))
-      .groupBy(Budgets.id)
+      .groupBy(Budgets.id, Incomes.name) // Group by Incomes.name as well
       .orderBy(desc(Budgets.id));
 
     setBudgets(result);
   };
 
-  const exportBudgets = () => {
-    // Prepare CSV header
-    const csvHeader = '"ID","Name","Amount","Total Spent","Total Items"';
+  const filterAndSortBudgets = () => {
+    let filtered = budgets;
 
-    // Prepare CSV rows with border styles
-    const csvRows = budgets.map(budget => [
+    if (searchTerm) {
+      filtered = filtered.filter(budget =>
+        budget.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    if (sortCriteria === 'amount') {
+      filtered.sort((a, b) => sortOrder === 'asc' ? a.amount - b.amount : b.amount - a.amount);
+    } else if (sortCriteria === 'createdAt') {
+      filtered.sort((a, b) => sortOrder === 'asc' ? new Date(a.createdAt) - new Date(b.createdAt) : new Date(b.createdAt) - new Date(a.createdAt));
+    }
+
+    setFilteredBudgets(filtered);
+  };
+
+  const exportBudgets = () => {
+    const csvHeader = '"ID","Name","Amount","Total Spent","Total Items"';
+    const csvRows = filteredBudgets.map(budget => [
       budget.id, budget.name, budget.amount, budget.totalSpent, budget.totalItem
     ].map(cell => `"${cell}"`).join(","));
-
-    // Combine header and rows with newline character
     const csvContent = csvHeader + "\n" + csvRows.join("\n");
-
-    // Create a Blob with the CSV content
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-
-    // Create a URL for the Blob
     const url = URL.createObjectURL(blob);
-
-    // Create a link element to trigger download
     const link = document.createElement("a");
     link.setAttribute("href", url);
     link.setAttribute("download", "budgets.csv");
-
-    // Append the link to the document body and click it
     document.body.appendChild(link);
     link.click();
-
-    // Cleanup
     document.body.removeChild(link);
   };
 
@@ -72,7 +86,32 @@ function Budget() {
           Export Budgets
         </button>
       </div>
-      <BudgetList budgets={budgets} refreshData={fetchBudgets} />
+      <div className='mb-4 flex space-x-4 p-5'>
+        <input
+          type="text"
+          placeholder="Search budgets..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="border p-2 rounded w-full"
+        />
+        <select
+          value={sortCriteria}
+          onChange={(e) => setSortCriteria(e.target.value)}
+          className="border p-2 rounded"
+        >
+          <option value="createdAt">Date</option>
+          <option value="amount">Amount</option>
+        </select>
+        <select
+          value={sortOrder}
+          onChange={(e) => setSortOrder(e.target.value)}
+          className="border p-2 rounded"
+        >
+          <option value="asc">Ascending</option>
+          <option value="desc">Descending</option>
+        </select>
+      </div>
+      <BudgetList budgets={filteredBudgets} refreshData={fetchBudgets} />
     </div>
   );
 }

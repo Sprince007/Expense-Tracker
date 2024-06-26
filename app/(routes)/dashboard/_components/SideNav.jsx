@@ -1,7 +1,7 @@
 'use client'
 import React, { useEffect } from 'react'
 import Image from 'next/image';
-import {LayoutGrid,PiggyBank,ReceiptText,ShieldCheck} from 'lucide-react'
+import {Brain, LayoutDashboard, LayoutGrid,PiggyBank,ReceiptText,ShieldCheck, ShieldPlus} from 'lucide-react'
 import { UserButton } from '@clerk/nextjs';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
@@ -10,20 +10,34 @@ function SideNav() {
     {
       id:1,
       name:'Dashboard',
-      icon:LayoutGrid,
+      icon:LayoutDashboard,
       path:'/dashboard'
     },
+
     {
       id:2,
+      name:'Incomes',
+      icon:ShieldPlus,
+      path:'/dashboard/incomes'
+    },
+
+    {
+      id:3,
       name:'Budgets',
       icon:PiggyBank,
       path:'/dashboard/budgets'
     },
     {
-      id:3,
+      id:4,
       name:'Expenses',
       icon:ReceiptText,
       path:'/dashboard/expenses'
+    },
+    {
+      id:5,
+      name:'Finance Friend',
+      icon:Brain,
+      path:'https://www.chatbase.co/chatbot-iframe/utfUOA183lFG1qrOBiSz0'
     }
   ]
   const path=usePathname();
@@ -33,9 +47,9 @@ function SideNav() {
   },[path])
   return (
     <div className='h-screen p-5 border shadow-sm'>
-      <Image src={'/logo.svg'}
-      alt='logo'
-      width={160}
+      <Image src={'/ExpenseTracker_Logo1.png'}
+      alt='ET_Logo1'
+      width={170}
       height={100}
       />
       <div className='mt-5'>

@@ -16,27 +16,27 @@ import EmojiPicker from 'emoji-picker-react'
 import { useUser } from '@clerk/nextjs'
 import { Input } from '@/components/ui/input'
 import { db } from '@/utils/dbConfig'
-import { Budgets } from '@/utils/schema'
+import { Incomes } from '@/utils/schema'
 import { eq } from 'drizzle-orm'
 import { toast } from 'sonner'
 
-function EditBudget({ budgetInfo, refreshData }) {
-    const [emojiIcon, setEmojiIcon] = useState(budgetInfo?.icon);
+function EditIncome({ incomeInfo, refreshData }) {
+    const [emojiIcon, setEmojiIcon] = useState(incomeInfo?.icon);
     const [openEmojiPicker, setOpenEmojiPicker] = useState(false);
     const [name, setName] = useState('');
     const [amount, setAmount] = useState('');
-    const [from, setFrom] = useState(''); // Add state for "from"
+    const [from, setFrom] = useState('');
 
     const { user } = useUser();
 
     useEffect(() => {
-        if (budgetInfo) {
-            setEmojiIcon(budgetInfo?.icon);
-            setName(budgetInfo.name);
-            setAmount(formatAmount(budgetInfo.amount));
-            setFrom(budgetInfo.from || ''); // Set "from" value, handle null/undefined
+        if (incomeInfo) {
+            setEmojiIcon(incomeInfo?.icon);
+            setName(incomeInfo.name);
+            setAmount(formatAmount(incomeInfo.amount));
+            setFrom(incomeInfo.from);
         }
-    }, [budgetInfo]);
+    }, [incomeInfo]);
 
     const formatAmount = (value) => {
         return value ? value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : "";
@@ -49,19 +49,19 @@ function EditBudget({ budgetInfo, refreshData }) {
         }
     };
 
-    const onUpdateBudget = async () => {
+    const onUpdateIncome = async () => {
         const formattedAmount = amount.replace(/,/g, '');
-        const result = await db.update(Budgets).set({
+        const result = await db.update(Incomes).set({
             name: name,
             amount: formattedAmount,
+            from: from,
             icon: emojiIcon,
-            from: from || null // Update "from" field, set to null if empty
-        }).where(eq(Budgets.id, budgetInfo.id))
+        }).where(eq(Incomes.id, incomeInfo.id))
             .returning();
 
         if (result) {
             refreshData();
-            toast('Budget has been successfully updated!');
+            toast('Income has been successfully updated!');
         }
     };
 
@@ -73,7 +73,7 @@ function EditBudget({ budgetInfo, refreshData }) {
                 </DialogTrigger>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle> Update Budget</DialogTitle>
+                        <DialogTitle> Update Income</DialogTitle>
                         <DialogDescription>
                             <div className='mt-5'>
                                 <Button variant="outline" className="text-lg" onClick={() => setOpenEmojiPicker(!openEmojiPicker)}>
@@ -89,34 +89,37 @@ function EditBudget({ budgetInfo, refreshData }) {
                                     />
                                 </div>
                                 <div className='mt-2'>
-                                    <h2 className='text-black font-medium my-1'>Budget Name</h2>
-                                    <Input placeholder="e.g. Home Decor"
+                                    <h2 className='text-black font-medium my-1'>Income Name</h2>
+                                    <Input placeholder="e.g. Finances"
                                         value={name}
                                         onChange={(e) => setName(e.target.value)} />
                                 </div>
                                 <div className='mt-2'>
-                                    <h2 className='text-black font-medium my-1'>Budget Amount</h2>
+                                    <h2 className='text-black font-medium my-1'>Income Amount</h2>
                                     <Input type="text"
                                         value={amount}
                                         placeholder="e.g. 2,000 FCFA"
                                         onChange={handleAmountChange} />
                                 </div>
-                                <div className='mt-2'>
-                                    <h2 className='text-black font-medium my-1'>From(optional)</h2>
-                                    <Input placeholder="e.g. Finance Office"
-                                        value={from}
-                                        onChange={(e) => setFrom(e.target.value)} /> {/* Add input for "from" */}
-                                </div>
+
+                                 <div className='mt-2'>
+                                     <h2 className='text-black font-medium my-1'>From</h2>
+                                     <Input
+                                      placeholder="e.g. Sherif"
+                                      value={from}
+                                      onChange={(e) => setFrom(e.target.value)} />
+                                </div>      
+
                             </div>
                         </DialogDescription>
                     </DialogHeader>
                     <DialogFooter className="sm:justify-start">
                         <DialogClose asChild>
                             <Button
-                                disabled={!(name && amount)} // Allow "from" to be empty
-                                onClick={onUpdateBudget}
+                                disabled={!(name && amount)}
+                                onClick={onUpdateIncome}
                                 className='mt-5 w-full bg-purple-500 hover:bg-cyan-500'>
-                                Update Budget
+                                Update Income
                             </Button>
                         </DialogClose>
                     </DialogFooter>
@@ -126,4 +129,4 @@ function EditBudget({ budgetInfo, refreshData }) {
     )
 }
 
-export default EditBudget;
+export default EditIncome;

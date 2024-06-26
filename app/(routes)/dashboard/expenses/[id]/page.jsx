@@ -1,6 +1,6 @@
 "use client";
 import { db } from '@/utils/dbConfig';
-import { Budgets, Expenses } from '@/utils/schema';
+import { Budgets, Expenses, Incomes } from '@/utils/schema';
 import { useUser } from '@clerk/nextjs';
 import { desc, eq, getTableColumns, sql } from 'drizzle-orm';
 import React, { useEffect, useState } from 'react';
@@ -39,12 +39,14 @@ function ExpensesScreen({ params }) {
     const result = await db.select({
       ...getTableColumns(Budgets),
       totalSpent: sql `sum(${Expenses.amount})`.mapWith(Number),
-      totalItem: sql `count(${Expenses.id})`.mapWith(Number)
+      totalItem: sql `count(${Expenses.id})`.mapWith(Number),
+      incomeName: Incomes.name // Fetch the name of the linked income
     }).from(Budgets)
       .leftJoin(Expenses, eq(Budgets.id, Expenses.budgetId))
+      .leftJoin(Incomes, eq(Budgets.incomeId, Incomes.id)) // Join with Incomes to get the income name
       .where(eq(Budgets.createdBy, user?.primaryEmailAddress?.emailAddress))
       .where(eq(Budgets.id, params.id))
-      .groupBy(Budgets.id);
+      .groupBy(Budgets.id, Incomes.name); // Group by Incomes.name as well
 
     setBudgetInfo(result[0]);
     getExpensesList();
@@ -131,7 +133,9 @@ function ExpensesScreen({ params }) {
       <div className='grid grid-cols-1 md:grid-cols-2 mt-6 gap-5'>
         {budgetInfo ? <BudgetItem budget={budgetInfo} /> :
           <div className='h-[150px] w-full bg-slate-200 rounded-lg animate-pulse'></div>}
-        <AddExpense budgetId={params.id} user={user} refreshData={getBudgetInfo} />
+        
+      <AddExpense budgetId={params.id} user={user} refreshData={getBudgetInfo} totalBudget={budgetInfo?.amount} />
+
       </div>
       <div className='mt-4'>
         <ExpenseListTable expensesList={expensesList} refreshData={getBudgetInfo} />

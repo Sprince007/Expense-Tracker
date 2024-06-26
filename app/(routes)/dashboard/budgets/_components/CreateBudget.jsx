@@ -19,31 +19,41 @@ import { Budgets } from '@/utils/schema' // Import Budgets schema.
 import { useUser } from '@clerk/nextjs' // Import useUser hook for user authentication.
 import { toast } from 'sonner' // Import toast for notifications.
 
-function CreateBudget({refreshData}) {
+function CreateBudget({ refreshData }) {
 
     // State for selected emoji icon
-    const [emojiIcont, setEmojiIcon] = useState('🤩')
+    const [emojiIcon, setEmojiIcon] = useState('🤩')
 
     // State for controlling the emoji picker visibility
     const [openEmojiPicker, setOpenEmojiPicker] = useState(false);
 
     // State for budget name
-    const [name, setName] = useState();
-    
+    const [name, setName] = useState('');
+
     // State for budget amount
-    const [amount, setAmount] = useState();
+    const [amount, setAmount] = useState('');
 
     // Get the current user
     const { user } = useUser();
 
+    const formatNumber = (value) => {
+      return new Intl.NumberFormat('en-US').format(value.replace(/,/g, ''));
+    };
+
+    const handleAmountChange = (e) => {
+      const value = e.target.value;
+      setAmount(formatNumber(value));
+    };
+
     // Function to create a new budget
     const onCreateBudget = async () => {
+      const numericAmount = parseFloat(amount.replace(/,/g, ''));
       const result = await db.insert(Budgets)
         .values({
           name: name,
-          amount: amount,
+          amount: numericAmount,
           createdBy: user?.primaryEmailAddress?.emailAddress,
-          icon: emojiIcont
+          icon: emojiIcon
         }).returning({ insertedId: Budgets.id })
 
       if (result) {
@@ -67,7 +77,7 @@ function CreateBudget({refreshData}) {
               <DialogDescription>
                 <div className='mt-5'>
                   <Button variant="outline" className="text-lg" onClick={() => setOpenEmojiPicker(!openEmojiPicker)}>
-                    {emojiIcont}
+                    {emojiIcon}
                   </Button>
                   <div className='absolute z-20'>
                     <EmojiPicker
@@ -84,7 +94,7 @@ function CreateBudget({refreshData}) {
                   </div>
                   <div className='mt-2'>
                     <h2 className='text-black font-medium my-1'>Budget Amount</h2>
-                    <Input type="number" placeholder="e.g. 2000 FCFA" onChange={(e) => setAmount(e.target.value)} />
+                    <Input type="text" placeholder="e.g. 2,000 FCFA" value={amount} onChange={handleAmountChange} />
                   </div>
                 </div>
               </DialogDescription>
@@ -93,7 +103,7 @@ function CreateBudget({refreshData}) {
               <DialogClose asChild>
                 <Button 
                   disabled={!(name && amount)} 
-                  onClick={() => onCreateBudget()} 
+                  onClick={onCreateBudget} 
                   className='mt-5 w-full bg-purple-500 hover:bg-cyan-500'>
                   Create Budget
                 </Button>
