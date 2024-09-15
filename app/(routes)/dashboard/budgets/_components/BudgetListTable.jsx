@@ -24,7 +24,7 @@ function BudgetListTable({budgetsList,refreshData}) {
        <h2 className='font-bold text-lg'>Latest Budgets</h2>
         <div className='grid grid-cols-4 bg-slate-200 p-2 mt-3'>
             <h2 className='font-bold'>Name</h2>
-            <h2 className='font-bold'>Amount (FCFA)</h2>
+            <h2 className='font-bold'>Amount (NGN)</h2>
             <h2 className='font-bold'>Created by</h2>
             <h2 className='font-bold'>Action</h2>
         </div>

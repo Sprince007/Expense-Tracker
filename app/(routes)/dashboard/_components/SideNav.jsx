@@ -38,6 +38,7 @@ function SideNav() {
       name:'Finance Friend',
       icon:Brain,
       path:'https://www.chatbase.co/chatbot-iframe/utfUOA183lFG1qrOBiSz0'
+      
     }
   ]
   const path=usePathname();

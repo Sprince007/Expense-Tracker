@@ -83,8 +83,8 @@ function Dashboard() {
         <div className='text-right'>
           <UserButton />
           <div className='text-xl font-bold mt-2'>
-            <p>Total Income: {formatNumber(totalIncome)} FCFA</p>
-            <p>Remaining Balance: {formatNumber(remainingBalance)} FCFA</p>
+            <p>Total Income: {formatNumber(totalIncome)} NGN</p>
+            <p>Remaining Balance: {formatNumber(remainingBalance)} NGN</p>
           </div>
         </div>
       </div>

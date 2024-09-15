@@ -10,8 +10,8 @@ function Header() {
   const {user,isSignedIn}=useUser();
   return (
     <div className='p-5 flex justify-between items-center border shadow-'>
-        <Image src={'./logo.svg'} 
-        alt='logo'
+        <Image src={'/ExpenseTracker_Logo1.png'} 
+        alt='ET_Logo1'
         width={160}
         height={100}
         />

@@ -98,7 +98,7 @@ function EditIncome({ incomeInfo, refreshData }) {
                                     <h2 className='text-black font-medium my-1'>Income Amount</h2>
                                     <Input type="text"
                                         value={amount}
-                                        placeholder="e.g. 2,000 FCFA"
+                                        placeholder="e.g. 2,000 NGN"
                                         onChange={handleAmountChange} />
                                 </div>
 

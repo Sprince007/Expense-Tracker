@@ -36,14 +36,14 @@ function CardInfo({ budgetList = [] }) { // Ensure budgetList is an array by def
                     <div className='p-7 border rounded-lg flex items-center justify-between'>
                         <div>
                             <h2 className='text-sm'>Total Budget</h2>
-                            <h2 className='font-bold text-2xl'>{formatAmount(totalBudget)} FCFA</h2>
+                            <h2 className='font-bold text-2xl'>{formatAmount(totalBudget)} NGN</h2>
                         </div>
                         <PiggyBank className='bg-purple-500 p-3 h-12 w-12 rounded-full text-white' />
                     </div>
                     <div className='p-7 border rounded-lg flex items-center justify-between'>
                         <div>
                             <h2 className='text-sm'>Total Spent</h2>
-                            <h2 className='font-bold text-2xl'>{formatAmount(totalSpent)} FCFA</h2>
+                            <h2 className='font-bold text-2xl'>{formatAmount(totalSpent)} NGN</h2>
                         </div>
                         <ReceiptText className='bg-purple-500 p-3 h-12 w-12 rounded-full text-white' />
                     </div>

@@ -41,15 +41,15 @@ function IncomeItem({ income }) {
                             <h2 className='text-sm text-gray-500'>{income.totalItem} Item</h2>
                         </div>
                     </div>
-                    <h2 className='font-bold text-purple-600 text-lg'>{formatAmount(income.amount)} FCFA</h2>
+                    <h2 className='font-bold text-purple-600 text-lg'>{formatAmount(income.amount)} NGN</h2>
                 </div>
                 <div className='mt-5'>
                     <div className='flex items-center justify-between mb-3'>
-                        <h2 className='text-xs text-slate-400'>{formatAmount(income.totalSpent ? income.totalSpent : 0)} FCFA Spent</h2>
+                        <h2 className='text-xs text-slate-400'>{formatAmount(income.totalSpent ? income.totalSpent : 0)} NGN Spent</h2>
                         {income.from && (
                             <h2 className='text-xs text-slate-400'> From: {income.from}</h2>
                         )}
-                        <h2 className='text-xs text-slate-400'>{formatAmount(income.amount - income.totalSpent)} FCFA Remaining</h2>
+                        <h2 className='text-xs text-slate-400'>{formatAmount(income.amount - income.totalSpent)} NGN Remaining</h2>
                     </div>
                     <div className='w-full bg-slate-300 h-2 rounded-full'>
                         <div className='bg-purple-600 h-2 rounded-full' style={{ width: `${calculateProgressPerc()}%` }}></div>

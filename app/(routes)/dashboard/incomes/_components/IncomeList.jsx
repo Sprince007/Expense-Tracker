@@ -51,7 +51,7 @@ function IncomeList() {
   return (
     <div className='mt-7'>
       <div className='mb-5 text-2xl font-bold'>
-        Total Income: {formatAmount(totalIncome)} FCFA
+        Total Income: {formatAmount(totalIncome)} NGN
       </div>
       <div className='mb-4'>
         <input

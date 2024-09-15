@@ -37,7 +37,7 @@ function StylishCombinedChart({ budgetList }) {
              </XAxis>
 
              <YAxis tickFormatter={formatNumber} tick={{ fontSize: 10 }}>
-             <Label value="FCFA" angle={-90} position="insideLeft" style={{ fontWeight: 'bold', textAnchor: 'middle' }} />
+             <Label value="NGN" angle={-90} position="insideLeft" style={{ fontWeight: 'bold', textAnchor: 'middle' }} />
               </YAxis>
 
             <Tooltip formatter={(value) => formatNumber(value)} />

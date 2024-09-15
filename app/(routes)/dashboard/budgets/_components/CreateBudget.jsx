@@ -94,7 +94,7 @@ function CreateBudget({ refreshData }) {
                   </div>
                   <div className='mt-2'>
                     <h2 className='text-black font-medium my-1'>Budget Amount</h2>
-                    <Input type="text" placeholder="e.g. 2,000 FCFA" value={amount} onChange={handleAmountChange} />
+                    <Input type="text" placeholder="e.g. 2,000 NGN" value={amount} onChange={handleAmountChange} />
                   </div>
                 </div>
               </DialogDescription>
