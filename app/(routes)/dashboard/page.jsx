@@ -95,7 +95,7 @@ function Dashboard() {
           <ExpenseListTable expensesList={expensesList} refreshData={() => getBudgetList()} />
         </div>
         <div className='grid gap-5'>
-          <h2 className='font-bold text-lg'>Latest Budgets</h2>
+          <h2 className='font-bold text-lg'>Latest Budget</h2>
           {budgetList.map((budget, index) => (
             <BudgetItem budget={budget} key={index} />
           ))}
